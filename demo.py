@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import sys
 import fasttext
-from utils import preprocess
 import jieba
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
+from utils import preprocess
 
 
 app = Flask(__name__)
@@ -14,9 +15,11 @@ CORS(app)
 @app.route('/text_classify')
 def hello_world():
     text = request.args.get("text")
-    content = preprocess.get_processed_text([text])
-    content = jieba.cut(content)
-    content = " ".join(content)
+    if preprocess.have_chinese(text):
+        # 包含中文，则只保留中文后并且对中文进行分词
+        content = preprocess.get_chinese_preprocessed_text(text)
+    else:
+        content = 's'
     print("content:", content)
     result = model.predict(content)
     label = result[0][0]

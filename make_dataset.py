@@ -18,7 +18,7 @@ def get_dataset(raw_path, output_file):
             label_text = '\t__label__2'
         content = sheet.cell_value(i, 1)
         content = str(content).replace('\n', ' ').replace('\t', ' ')
-        content = preprocess.get_processed_text([content])
+        content = preprocess.preprocess_chinese_text([content])
         content = jieba.cut(content)
         content = ' '.join(content)
         content = content
